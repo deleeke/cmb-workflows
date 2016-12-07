@@ -48,6 +48,16 @@
             <Min Inclusive="true">1</Min>
           </RangeInfo>
         </Int>
+        <Double Name="another-param" Label="Another Parameter" Version="0" NumberOfRequiredValues="1">
+            <BriefDescription>test for adding another parameter</BriefDescription>
+            <ComponetLabels>
+                <Label>another-param:</Label>
+            </ComponetLabels>
+            <DefaultValue>500</DefaultValue>
+            <RangeInfo>
+                <Min Inclusive="false">0.0</Min>
+            </RangeInfo>
+        </Double>
         <Int Name="max-levels" Label="Maximum Levels" Version="0">
           <DefaultValue>1</DefaultValue>
           <RangeInfo>
@@ -173,7 +183,7 @@
           </DiscreteInfo>
         </String>
         <!-- Next 4 values not currently used-->
-        <Double Name="mfac" Label="MFAC" Optional="true" IsEnabledByDefault="false">
+        <!--        <Double Name="mfac" Label="MFAC" Optional="true" IsEnabledByDefault="false">
           <BriefDescription>ratio of structural mesh width to Cartesian mesh width</BriefDescription>
           <DefaultValue>2.0</DefaultValue>
           <RangeInfo>
@@ -202,7 +212,7 @@
             <Min Inclusive="true">0</Min>
             <Max Inclusive="true">43</Max>
           </RangeInfo>
-        </Int>
+        </Int> -->
         <Double Name="efficiency-tolerance" Label="Efficiency Tolerance">
           <BriefDescription>min % of tag cells in new patch level</BriefDescription>
           <DefaultValue>0.85</DefaultValue>

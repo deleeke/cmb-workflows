@@ -281,12 +281,38 @@ class Writer2D:
         value = '[ (0,0), (%d,%d) ]' % (upper_x, upper_y)
 
         card.write_value(out, value, quote_string=False, tab=tab)
+
       elif card.is_custom:
         print 'TODO', card.keyword
       else:
         card.write(out, att, tab=tab)
 
     self.end_component(out)
+
+# ---------------------------------------------------------------------
+
+
+  def write_toplevel(self, out, component, format_list):
+    '''Custom writer for Top Level component
+    '''
+    print 'Writing component', component.name
+    att_list = self.sim_atts.findAttributes(component.att_type)
+    if not att_list:
+      print 'ERROR: Missing', component.att_type, 'attribute'
+      return
+    
+    out.write('\n') 
+    out.write('// %s' % component.name)
+    out.write('\n')
+    
+    att = att_list[0]
+    tab = component.tab
+    
+    for card in format_list:
+        card.write(out, att, tab=tab)
+
+   
+
 
 # ---------------------------------------------------------------------
   def write_grid(self, out, component, format_list):
@@ -357,10 +383,11 @@ class Writer2D:
 
 # ---------------------------------------------------------------------
   def begin_component(self, out, component):
-    out.write('\n')
+    out.write('\n') 
     out.write('%s {' % component.name)
     out.write('\n')
 
 # ---------------------------------------------------------------------
   def end_component(self, out, indent=''):
+    
     out.write('%s}\n' % indent)

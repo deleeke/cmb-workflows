@@ -35,6 +35,12 @@ from internal.writers import CardFormat, OutputComponent, Writer2D
 card = CardFormat
 # Please order the components alphabetically in this table
 format_table = {
+  'toplevel' : [  
+    card('MFAC', item_path='mfac'),
+    card('ELEM_TYPE', item_path='element-type'),
+    card('PK1_DEV_QUAD_ORDER', item_path='pk1-dev-quad-order'),
+    card('PK1_DIL_QUAD_ORDER', item_path='pk1-dil-quad-order'),
+      ],
   'Main': [
     card('solver', att_type='solver', item_path='solver/solver-type'),
     card(None, comment='log file parameters'),
@@ -73,7 +79,7 @@ format_table = {
       is_custom=True, att_type='grid', item_path='base-grid-size'),
     card('x_lo', item_path='origin'),
     card('x_up', item_path='length'),
-    card('periodic_dimension', item_path='periodic'),
+    card('periodic_dimension', item_path='periodic')
   ],
   'GriddingAlgorithm': [
     card('max_levels', item_path='max-levels'),
@@ -177,6 +183,7 @@ component_list = [
     custom_component_method='write_bc_coefs',
     format_list_name='bc',
     tab=16),
+  comp('Top Level', att_type='toplevel', custom_component_method='write_toplevel', format_list_name='toplevel'),
   comp('Main', att_type='output', custom_component_method='write_main'),
   comp('CartesianGeometry',
     att_type='geometry', custom_component_method='write_geometry'),

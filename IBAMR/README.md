@@ -5,4 +5,4 @@ method, with support for Cartesian grid adaptive mesh refinement (AMR).
 See https://github.com/IBAMR/IBAMR
 
 
-**THESE CONTENTS ARE NOT COMLETE AND SUBJECT TO CHANGE.**
+**THESE CONTENTS ARE NOT COMPLETE AND SUBJECT TO CHANGE.**

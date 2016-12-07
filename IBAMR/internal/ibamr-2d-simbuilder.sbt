@@ -11,6 +11,7 @@
     <File>templates/parameters.sbt</File>
     <File>templates/output.sbt</File>
     <File>templates/controls.sbt</File>
+    <File>templates/toplevel.sbt</File>
   </Includes>
 
   <!-- View specifications -->
@@ -18,6 +19,7 @@
     <View Type="Group" Title="SimBuilder" TopLevel="true"
       FilterByAdvanceLevel="false" FilterByCategory="false">
       <Views>
+        <View Title="Top Level" />
         <View Title="Grid"/>
         <View Title="BC"/>
         <View Title="Solver" />
@@ -84,6 +86,12 @@
     <View Type="Instanced" Title="Controls">
       <InstancedAttributes>
         <Att Name="controls" Type="controls" />
+      </InstancedAttributes>
+    </View>
+   
+    <View Type="Instanced" Title="Top Level">
+      <InstancedAttributes>
+        <Att Name="toplevel" Type="toplevel" />
       </InstancedAttributes>
     </View>
 

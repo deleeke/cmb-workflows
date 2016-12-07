@@ -105,4 +105,4 @@ if __name__ == '__main__':
   export_spec = MockExportSpec(sim_atts, export_atts)
   completed = ibamr.ExportCMB(export_spec)
 
-  print 'finis, completed:', completed
+  print 'finish, completed:', completed
