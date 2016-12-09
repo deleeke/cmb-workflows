@@ -307,9 +307,12 @@ class Writer2D:
     
     att = att_list[0]
     tab = component.tab
-    
-    for card in format_list:
-        card.write(out, att, tab=tab)
+
+    for card in format_list:   
+      if card.keyword == 'DX0':
+        print 'TODO: Calculate DX0'
+      else:
+        self.write_card(out, att, component, card)
 
    
 

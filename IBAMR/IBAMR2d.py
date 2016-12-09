@@ -40,7 +40,16 @@ format_table = {
     card('ELEM_TYPE', item_path='element-type'),
     card('PK1_DEV_QUAD_ORDER', item_path='pk1-dev-quad-order'),
     card('PK1_DIL_QUAD_ORDER', item_path='pk1-dil-quad-order'),
-      ],
+    card('MU', att_type='parameters', item_path='viscosity'),
+    card('RHO', att_type='parameters', item_path='density'),
+    card('START_TIME', att_type='solver', item_path='time/start-time'),
+    card('END_TIME', att_type='solver', item_path='time/end-time'),
+    # TODO: Calculate DX0 and DX in writer based off of grid size,
+    # length of domain, and finest mesh size
+    # card('N', att_type='grid', item_path='base-grid-size'),
+    # card('L', att_type='parameters', item_path='length'),
+    card('DX0')
+    ],
   'Main': [
     card('solver', att_type='solver', item_path='solver/solver-type'),
     card(None, comment='log file parameters'),
