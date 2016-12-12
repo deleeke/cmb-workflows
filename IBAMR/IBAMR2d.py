@@ -44,11 +44,11 @@ format_table = {
     card('RHO', att_type='parameters', item_path='density'),
     card('START_TIME', att_type='solver', item_path='time/start-time'),
     card('END_TIME', att_type='solver', item_path='time/end-time'),
-    # TODO: Calculate DX0 and DX in writer based off of grid size,
-    # length of domain, and finest mesh size
-    # card('N', att_type='grid', item_path='base-grid-size'),
-    # card('L', att_type='parameters', item_path='length'),
-    card('DX0')
+    card('N', att_type='grid', item_path='base-grid-size'),
+    card('L', att_type='geometry', item_path='length'),
+    card('DX0'), 
+    #TODO Calculate DX from MAX_LEVELS and REF_RATIO
+    card('DX'),
     ],
   'Main': [
     card('solver', att_type='solver', item_path='solver/solver-type'),

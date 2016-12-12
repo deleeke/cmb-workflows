@@ -161,6 +161,40 @@ class Writer2D:
         card.write(out, card_att, base_item_path=base_path, tab=tab)
 
 # ---------------------------------------------------------------------
+
+  def getValue(self, card, indx=0):
+    '''
+    Returns value from card item by extracting attribute type and path.
+    
+    Required argument:
+        card: (object) CardFormat object with att_type != None 
+
+    Optional argument:
+        indx: (int) Index of value in item if item has multiple values
+        Default is 0.
+    '''
+
+    att_list = self.sim_atts.findAttributes(card.att_type)
+    if not att_list:
+      print 'ERROR: Missing attribute type', card.att_type
+    att = att_list[0]
+    # Use try/except to get whatever the value is, since 
+    # python need not know what type it is
+    try:
+      item = att.findDouble(card.item_path)
+      return item.value(indx)           
+    except:
+      try:
+        item = att.findInt(card.item_path) 
+        return item.value(indx)           
+      except:
+        try:
+          item = att.findString(card.item_path)
+          return item.value(indx)           
+        except:
+          print 'ERROR: no value found for %s/%s' % (card.att_type, card.item_path)
+
+# ---------------------------------------------------------------------
   def write_main(self, out, component, format_list):
     '''Custom method for writing Main component
     '''
@@ -260,26 +294,9 @@ class Writer2D:
     for card in format_list:
       if 'domain_boxes' == card.keyword:
         # Get the grid attribute & base-grid-size item
-        att_list = self.sim_atts.findAttributes(card.att_type)
-        if not att_list:
-          print 'ERROR: Missing attribute type', card.att_type
-          continue
-
-        grid_att = att_list[0]
-        grid_size_item = grid_att.findInt(card.item_path)
-        if not grid_size_item:
-          print 'ERROR: Missing item', card.item_path
-          continue
-
-        if grid_size_item.numberOfValues() != 2:
-          print 'ERROR: Wrong number of values (should be 2) for item', \
-            card.item_path
-          continue
-
-        upper_x = grid_size_item.value(0) - 1
-        upper_y = grid_size_item.value(1) - 1
+        upper_x = self.getValue(card, indx=0) - 1
+        upper_y = self.getValue(card, indx=1) - 1
         value = '[ (0,0), (%d,%d) ]' % (upper_x, upper_y)
-
         card.write_value(out, value, quote_string=False, tab=tab)
 
       elif card.is_custom:
@@ -307,15 +324,34 @@ class Writer2D:
     
     att = att_list[0]
     tab = component.tab
+    N, L = False, False
 
     for card in format_list:   
+      if card.keyword == 'N':
+        N = self.getValue(card)
+        card.write_value(out, N, quote_string=False, tab=tab)
+        continue
+
+      if card.keyword == 'L':
+        L = self.getValue(card)
+        card.write_value(out, L, quote_string=False, tab=tab)
+        continue
+
       if card.keyword == 'DX0':
-        print 'TODO: Calculate DX0'
+        if not N:
+            print 'ERROR No base grid size provided'
+        if not L:
+            print 'ERROR No computational domain size provided'
+        value = L/N
+        card.write_value(out, value, quote_string=False, tab=tab)
+        continue
+     
+      if card.keyword == 'DX':
+        card.write_value(out, 'TODO', quote_string=False, tab=tab)
+        continue
+
       else:
         self.write_card(out, att, component, card)
-
-   
-
 
 # ---------------------------------------------------------------------
   def write_grid(self, out, component, format_list):

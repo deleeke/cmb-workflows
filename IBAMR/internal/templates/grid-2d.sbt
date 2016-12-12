@@ -48,16 +48,6 @@
             <Min Inclusive="true">1</Min>
           </RangeInfo>
         </Int>
-        <Double Name="another-param" Label="Another Parameter" Version="0" NumberOfRequiredValues="1">
-            <BriefDescription>test for adding another parameter</BriefDescription>
-            <ComponetLabels>
-                <Label>another-param:</Label>
-            </ComponetLabels>
-            <DefaultValue>500</DefaultValue>
-            <RangeInfo>
-                <Min Inclusive="false">0.0</Min>
-            </RangeInfo>
-        </Double>
         <Int Name="max-levels" Label="Maximum Levels" Version="0">
           <DefaultValue>1</DefaultValue>
           <RangeInfo>
