@@ -162,7 +162,7 @@ class Writer2D:
 
 # ---------------------------------------------------------------------
 
-  def getValue(self, card, indx=0):
+  def get_value(self, card, indx=0):
     '''
     Returns value from card item by extracting attribute type and path.
     
@@ -195,16 +195,20 @@ class Writer2D:
           print 'ERROR: no value found for %s/%s' % (card.att_type, card.item_path)
 
 # ---------------------------------------------------------------------
-  def write_main(self, out, component, format_list):
-    '''Custom method for writing Main component
-    '''
-    print 'Writing component', component.name
+  def get_att(self, component):
+
     att_list = self.sim_atts.findAttributes(component.att_type)
     if not att_list:
       print 'ERROR: Missing', component.att_type, 'attribute'
       return
-
-    att = att_list[0]
+    
+    return att_list[0]
+# ---------------------------------------------------------------------
+  def write_main(self, out, component, format_list):
+    '''Custom method for writing Main component
+    '''
+    print 'Writing component', component.name
+    att = self.get_att(component)
     tab = component.tab
     self.begin_component(out, component)
 
@@ -282,20 +286,16 @@ class Writer2D:
     '''Custom method for writing CartesianGeometry
     '''
     print 'Writing component', component.name
-    att_list = self.sim_atts.findAttributes(component.att_type)
-    if not att_list:
-      print 'ERROR: Missing', component.att_type, 'attribute'
-      return
 
-    att = att_list[0]
+    att = self.get_att(component)
     tab = component.tab
     self.begin_component(out, component)
 
     for card in format_list:
       if 'domain_boxes' == card.keyword:
         # Get the grid attribute & base-grid-size item
-        upper_x = self.getValue(card, indx=0) - 1
-        upper_y = self.getValue(card, indx=1) - 1
+        upper_x = self.get_value(card, indx=0) - 1
+        upper_y = self.get_value(card, indx=1) - 1
         value = '[ (0,0), (%d,%d) ]' % (upper_x, upper_y)
         card.write_value(out, value, quote_string=False, tab=tab)
 
@@ -313,27 +313,23 @@ class Writer2D:
     '''Custom writer for Top Level component
     '''
     print 'Writing component', component.name
-    att_list = self.sim_atts.findAttributes(component.att_type)
-    if not att_list:
-      print 'ERROR: Missing', component.att_type, 'attribute'
-      return
     
     out.write('\n') 
     out.write('// %s' % component.name)
     out.write('\n')
     
-    att = att_list[0]
+    att = self.get_att(component)
     tab = component.tab
     N, L = False, False
 
     for card in format_list:   
       if card.keyword == 'N':
-        N = self.getValue(card)
+        N = self.get_value(card)
         card.write_value(out, N, quote_string=False, tab=tab)
         continue
 
       if card.keyword == 'L':
-        L = self.getValue(card)
+        L = self.get_value(card)
         card.write_value(out, L, quote_string=False, tab=tab)
         continue
 
@@ -358,12 +354,7 @@ class Writer2D:
     '''Custom writer for GriddingAlgorithm component
     '''
     print 'Writing component', component.name
-    att_list = self.sim_atts.findAttributes(component.att_type)
-    if not att_list:
-      print 'ERROR: Missing', component.att_type, 'attribute'
-      return
-
-    att = att_list[0]
+    att = self.get_att(component)
     tab = component.tab
     self.begin_component(out, component)
 
