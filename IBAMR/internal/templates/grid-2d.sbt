@@ -59,6 +59,7 @@
         <String Name="refinement-ratio" Label="Refinement Ratio">
           <ChildrenDefinitions>
             <Int Name="fixed" Label="Fixed Refinement Ratio">
+              <BriefDescription>Recommended values of 2 or 4 (effective for every level)</BriefDescription>
               <DefaultValue>2</DefaultValue>
               <RangeInfo>
                 <Min Inclusive="true">1</Min>

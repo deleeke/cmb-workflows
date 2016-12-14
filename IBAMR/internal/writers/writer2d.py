@@ -195,6 +195,7 @@ class Writer2D:
           print 'ERROR: no value found for %s/%s' % (card.att_type, card.item_path)
 
 # ---------------------------------------------------------------------
+
   def get_att(self, component):
 
     att_list = self.sim_atts.findAttributes(component.att_type)
@@ -320,8 +321,7 @@ class Writer2D:
     
     att = self.get_att(component)
     tab = component.tab
-    N, L = False, False
-
+    order_dict = {1:'FIRST', 2:'SECOND', 3:'THIRD', 4:'FOURTH', 5:'FIFTH', 6:'SIXTH', 7:'SEVENTH'}
     for card in format_list:   
       if card.keyword == 'N':
         N = self.get_value(card)
@@ -332,20 +332,52 @@ class Writer2D:
         L = self.get_value(card)
         card.write_value(out, L, quote_string=False, tab=tab)
         continue
+      if card.keyword == 'MAX_LEVELS':
+        max_levels = self.get_value(card)
+      
+      if card.keyword == 'REF_RATIO':
+        card_att = self.get_att(card)
+        type_item = card_att.findString(card.item_path)
+        data_type = type_item.value(0)
+        item_path = '%s/%s' % (type_item.name(), data_type)
+        item = card_att.itemAtPath(item_path, '/')
+        data_item = smtk.attribute.to_concrete(item)
+        if 'fixed' == data_type:
+          # data_item is single double value
+          ref_ratio = data_item.value(0)
+        
+        elif 'table' == data_type:
+          # data_item is Group with rows of double[2] items
+          num_rows = data_item.numberOfGroups()
+          vals = []
+          for i in range(num_rows):
+            item = data_item.find(i, 'row')
+            row_item = smtk.attribute.to_concrete(item)
+            vals.append(row_item.value(0))
+            vals.append(row_item.value(1))
+          ref_ratio = max(vals)
+
+        card.write_value(out, ref_ratio, quote_string=False, tab=tab)
+        continue
 
       if card.keyword == 'DX0':
-        if not N:
-            print 'ERROR No base grid size provided'
-        if not L:
-            print 'ERROR No computational domain size provided'
         value = L/N
         card.write_value(out, value, quote_string=False, tab=tab)
         continue
-     
-      if card.keyword == 'DX':
-        card.write_value(out, 'TODO', quote_string=False, tab=tab)
+
+      if card.keyword == 'NFINEST':
+        nfinest =(ref_ratio**(max_levels - 1))*N 
+        card.write_value(out, nfinest, quote_string=False, tab=tab)
         continue
 
+      if card.keyword == 'DX':
+        dx = L/nfinest
+        card.write_value(out, dx, quote_string=False, tab=tab)
+        continue
+      if 'PK1' in card.keyword.split('_'):
+        value = order_dict[self.get_value(card)]
+        card.write_value(out, value, quote_string=True, tab=tab)
+        continue
       else:
         self.write_card(out, att, component, card)
 
